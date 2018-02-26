@@ -5,10 +5,15 @@ import sys
 from weboob.core.ouiboube import WebNip
 from weboob.tools.json import WeboobEncoder
 
+from cuizin import db
+
 BACKENDS = ['750g', 'allrecipes', 'cuisineaz', 'marmiton', 'supertoinette']
 
 
-def __main__(url, modules_path=None):
+def add_recipe(url, modules_path=None):
+    db.database.connect()
+    db.database.create_tables([db.Recipe])
+
     webnip = WebNip(modules_path=modules_path)
 
     backends = [
@@ -24,10 +29,5 @@ def __main__(url, modules_path=None):
         browser = backend.browser
         if url.startswith(browser.BASEURL):
             browser.location(url)
-            recipe = browser.page.get_recipe()
-            print(json.dumps(recipe, cls=WeboobEncoder))
+            db.Recipe.from_weboob(browser.page.get_recipe()).save()
             break
-
-
-if __name__ == "__main__":
-    __main__(sys.argv[1])
