@@ -8,7 +8,7 @@ module.exports = {
   dev: {
 
     // Paths
-    assetsSubDirectory: path.resolve(__dirname, '../cuizin/static'),
+    assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {},
 
