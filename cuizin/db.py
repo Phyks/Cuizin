@@ -1,4 +1,5 @@
 import base64
+import mimetypes
 
 import requests
 from peewee import (
@@ -8,11 +9,13 @@ from peewee import (
 from playhouse.shortcuts import model_to_dict
 
 
-database = SqliteDatabase('recipes.db')
+database = SqliteDatabase('recipes.db', threadlocals=True)
+database.connect()
 
 
 class Recipe(Model):
     title = CharField()
+    url = CharField(null=True, unique=True)
     author = CharField(null=True)
     picture = BlobField(null=True)
     short_description = TextField(null=True)
@@ -29,7 +32,7 @@ class Recipe(Model):
     @staticmethod
     def from_weboob(obj):
         recipe = Recipe()
-        for field in ['title', 'author', 'picture_url', 'short_description',
+        for field in ['title', 'url', 'author', 'picture_url', 'short_description',
                       'preparation_time', 'cooking_time', 'instructions']:
             value = getattr(obj, field)
             if value:
@@ -39,7 +42,11 @@ class Recipe(Model):
 
     def to_dict(self):
         serialized = model_to_dict(self)
-        serialized['picture'] = base64.b64encode(
-            serialized['picture']
-        ).decode('utf-8')
+        prepend_info = (
+          'data:%s;base64' % mimetypes.guess_type(serialized['picture'])[0]
+        )
+        serialized['picture'] = '%s,%s' % (
+            prepend_info,
+            base64.b64encode(serialized['picture']).decode('utf-8')
+        )
         return serialized

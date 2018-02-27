@@ -11,9 +11,6 @@ BACKENDS = ['750g', 'allrecipes', 'cuisineaz', 'marmiton', 'supertoinette']
 
 
 def add_recipe(url, modules_path=None):
-    db.database.connect()
-    db.database.create_tables([db.Recipe])
-
     webnip = WebNip(modules_path=modules_path)
 
     backends = [
@@ -25,9 +22,20 @@ def add_recipe(url, modules_path=None):
         for module in BACKENDS
     ]
 
+    recipe = None
     for backend in backends:
         browser = backend.browser
         if url.startswith(browser.BASEURL):
             browser.location(url)
-            db.Recipe.from_weboob(browser.page.get_recipe()).save()
+            recipe = db.Recipe.from_weboob(browser.page.get_recipe())
+            # Ensure URL is set
+            recipe.url = url
             break
+
+    if not recipe:
+        # TODO
+        recipe = db.Recipe()
+        recipe.url = url
+
+    recipe.save()
+    return recipe

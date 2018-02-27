@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import HelloWorld from '@/components/HelloWorld';
+import Home from '@/components/Home';
+import New from '@/components/New';
+import Recipe from '@/components/Recipe';
 
 Vue.use(Router);
 
@@ -8,8 +10,18 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld,
+      name: 'Home',
+      component: Home,
+    },
+    {
+      path: '/new',
+      name: 'New',
+      component: New,
+    },
+    {
+      path: '/recipe/:recipeId',
+      name: 'Recipe',
+      component: Recipe,
     },
   ],
 });

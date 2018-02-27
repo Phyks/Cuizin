@@ -7,6 +7,10 @@ import 'vuetify/dist/vuetify.min.css';
 import App from './App';
 import router from './router';
 
+// Isomorphic fetch
+require('es6-promise').polyfill();
+require('isomorphic-fetch');
+
 Vue.use(Vuetify);
 
 Vue.config.productionTip = false;
