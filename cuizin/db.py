@@ -1,6 +1,6 @@
 import base64
-import mimetypes
 
+import magic
 import requests
 from peewee import (
     Model, SqliteDatabase,
@@ -9,7 +9,7 @@ from peewee import (
 from playhouse.shortcuts import model_to_dict
 
 
-database = SqliteDatabase('recipes.db', threadlocals=True)
+database = SqliteDatabase('recipes.db')
 database.connect()
 
 
@@ -43,7 +43,8 @@ class Recipe(Model):
     def to_dict(self):
         serialized = model_to_dict(self)
         prepend_info = (
-          'data:%s;base64' % mimetypes.guess_type(serialized['picture'])[0]
+          'data:%s;base64' % magic.from_buffer(serialized['picture'],
+                                               mime=True)
         )
         serialized['picture'] = '%s,%s' % (
             prepend_info,

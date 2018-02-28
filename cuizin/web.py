@@ -1,7 +1,6 @@
 import json
 
 import bottle
-import peewee
 
 from cuizin import add_recipe
 from cuizin import db
@@ -55,11 +54,13 @@ def api_v1_recipes_post():
 
     recipes = []
     try:
-        recipes = [add_recipe(data['url']).to_dict()]
-    except peewee.IntegrityError:
-        recipes = [db.Recipe.select().where(
+        recipe = db.Recipe.select().where(
             db.Recipe.url == data['url']
-        ).first().to_dict()]
+        ).first()
+        assert recipe
+        recipes = [recipe.to_dict()]
+    except AssertionError:
+        recipes = [add_recipe(data['url']).to_dict()]
 
     return {
         'recipes': recipes
@@ -78,6 +79,21 @@ def api_v1_recipe(id):
                 db.Recipe.id == id
             )
         ]
+    }
+
+
+@app.delete('/api/v1/recipe/:id', ['DELETE', 'OPTIONS'])
+def api_v1_recipe_delete(id):
+    # CORS
+    if bottle.request.method == 'OPTIONS':
+        return ''
+
+    db.Recipe.delete().where(
+        db.Recipe.id == id
+    ).execute()
+
+    return {
+        'status': 'OK'
     }
 
 

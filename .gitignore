@@ -3,6 +3,7 @@
 package-lock.json
 yarn.lock
 *.db
+__pycache__
 
 .DS_Store
 node_modules/

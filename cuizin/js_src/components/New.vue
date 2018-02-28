@@ -19,7 +19,7 @@
         </v-form>
       </v-flex>
     </v-layout>
-    <v-layout row wrap mt-5>
+    <v-layout row wrap mt-5 v-if="featureAddManually">
       <v-flex xs12>
         <h2>Add manually</h2>
         <v-form v-model="validAdd">
@@ -116,6 +116,7 @@ export default {
           }
         },
       ],
+      featureAddManually: false,
     };
   },
   methods: {
