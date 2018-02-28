@@ -1,4 +1,5 @@
 import base64
+import json
 
 import magic
 import requests
@@ -13,18 +14,26 @@ database = SqliteDatabase('recipes.db')
 database.connect()
 
 
+class JSONField(TextField):
+    def db_value(self, value):
+        return json.dumps(value)
+
+    def python_value(self, value):
+        if value is not None:
+            return json.loads(value)
+
+
 class Recipe(Model):
     title = CharField()
     url = CharField(null=True, unique=True)
     author = CharField(null=True)
     picture = BlobField(null=True)
     short_description = TextField(null=True)
-    nb_person = None  # TODO
+    nb_person = TextField(null=True)
     preparation_time = IntegerField(null=True)  # In minutes
     cooking_time = IntegerField(null=True)  # In minutes
-    ingredients = None  # TODO
+    ingredients = JSONField(null=True)
     instructions = TextField()
-    comments = None  # TODO
 
     class Meta:
         database = database
@@ -32,11 +41,14 @@ class Recipe(Model):
     @staticmethod
     def from_weboob(obj):
         recipe = Recipe()
-        for field in ['title', 'url', 'author', 'picture_url', 'short_description',
-                      'preparation_time', 'cooking_time', 'instructions']:
+        for field in ['title', 'url', 'author', 'picture_url',
+                      'short_description', 'preparation_time', 'cooking_time',
+                      'ingredients', 'instructions']:
             value = getattr(obj, field)
             if value:
                 setattr(recipe, field, value)
+
+        recipe.nb_person = '-'.join(str(num) for num in obj.nb_person)
         recipe.picture = requests.get(obj.picture_url).content
         return recipe
 

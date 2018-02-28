@@ -17,8 +17,13 @@
               <p><v-icon>whatshot</v-icon> {{ recipe.cooking_time }} mins</p>
             </v-flex>
           </v-layout>
+          <ul>
+            <li v-for="ingredient in this.recipe.ingredients">
+              {{ ingredient }}
+            </li>
+          </ul>
+          <p>{{ this.recipe.nb_person }}</p>
           <p>{{ this.recipe.short_description }}</p>
-          <p>{{ this.recipe.ingredients }}</p>
           <p>{{ this.recipe.instructions }}</p>
           <p v-if="this.recipe.url">
               <a :href="this.recipe.url">Original link</a>
