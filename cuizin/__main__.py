@@ -1,3 +1,6 @@
+"""
+Main entry point for Cuizin.
+"""
 import os
 
 import peewee
@@ -11,7 +14,7 @@ app = application = web.app
 if __name__ == '__main__':
     HOST = os.environ.get('CUIZIN_HOST', 'localhost')
     PORT = os.environ.get('CUIZIN_PORT', '8080')
-    DEBUG = os.environ.get('CUIZIN_DEBUG', False)
+    DEBUG = bool(os.environ.get('CUIZIN_DEBUG', False))
 
     try:
         db.database.create_tables([db.Recipe])

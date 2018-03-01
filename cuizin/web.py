@@ -1,9 +1,12 @@
 import json
+import os
 
 import bottle
 
-from cuizin import add_recipe
 from cuizin import db
+from cuizin.scraping import add_recipe
+
+MODULE_DIR = os.path.dirname(os.path.realpath(__file__))
 
 
 app = bottle.Bottle()
@@ -26,13 +29,20 @@ def enable_cors():
 
 @app.route('/api/v1', ['GET', 'OPTIONS'])
 def api_v1_index():
+    """
+    API index route
+    """
     return {
-        'recipes': '/api/v1/recipes'
+        'recipes': '/api/v1/recipes',
+        'recipe': '/api/v1/recipe/:id'
     }
 
 
 @app.route('/api/v1/recipes', ['GET', 'OPTIONS'])
 def api_v1_recipes():
+    """
+    List all recipes
+    """
     # CORS
     if bottle.request.method == 'OPTIONS':
         return ''
@@ -46,6 +56,9 @@ def api_v1_recipes():
 
 @app.post('/api/v1/recipes')
 def api_v1_recipes_post():
+    """
+    Create a new recipe from URL
+    """
     data = json.load(bottle.request.body)
     if 'url' not in data:
         return {
@@ -69,6 +82,9 @@ def api_v1_recipes_post():
 
 @app.route('/api/v1/recipe/:id', ['GET', 'OPTIONS'])
 def api_v1_recipe(id):
+    """
+    Get a given recipe from db
+    """
     # CORS
     if bottle.request.method == 'OPTIONS':
         return ''
@@ -84,6 +100,9 @@ def api_v1_recipe(id):
 
 @app.delete('/api/v1/recipe/:id', ['DELETE', 'OPTIONS'])
 def api_v1_recipe_delete(id):
+    """
+    Delete a given recipe from db
+    """
     # CORS
     if bottle.request.method == 'OPTIONS':
         return ''
@@ -97,7 +116,19 @@ def api_v1_recipe_delete(id):
     }
 
 
+@app.get('/')
+def index():
+    """
+    Return built index.html file
+    """
+    return bottle.static_file('index.html',
+                              root=os.path.join(MODULE_DIR, 'dist'))
+
+
 @app.get('/static/<filename:path>')
 def get_static_files(filename):
-    """Get Static files"""
-    return bottle.static_file(filename)  # TODO: root=
+    """
+    Get Static files
+    """
+    return bottle.static_file(filename,
+                              root=os.path.join(MODULE_DIR, 'dist', 'static'))
