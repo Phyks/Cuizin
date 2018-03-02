@@ -47,8 +47,9 @@ def add_recipe(url):
             recipe.url = url
             break
 
+    # If we could not scrape anything, simply create an empty recipe storing
+    # the URL.
     if not recipe:
-        # TODO
         recipe = db.Recipe()
         recipe.url = url
 

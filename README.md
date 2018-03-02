@@ -17,8 +17,10 @@ $ npm run build  # Build the JS dependencies
 
 Ideally, Python dependencies should be installed in a virtual environment.
 
-TODO:
-- `npm run build` should handle prefix
+If you serve the app from a subdirectory (and not the root of your domain),
+you might want to run `API_URL=/subdir/ npm run build` instead of `npm run
+build` to use the correct path to call the API. Note that the trailing slash
+is important.
 
 
 ## Usage
@@ -57,6 +59,9 @@ Additionnally, you can use `make dev` to spawn a development webserver to
 serve the JS frontend and auto-update/auto-reload when you make changes. The
 spawned JS server will be set up at `localhost:8081` and you should start the
 backend Python server at `localhost:8080` with `python -m cuizin` along it.
+You can simply open the app at `localhost:8081` and start developping, it will
+automatically call the API from the `python -m cuizin` process, on port
+`8080`.
 
 
 ## License

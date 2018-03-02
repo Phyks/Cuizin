@@ -1,2 +1,1 @@
-export const API_URL = 'http://localhost:8080';  // TODO: Should be coming from an env variable
-export const FOOBAR = 'TODO';  // TODO
+export const API_URL = process.env.API_URL || '/';  // eslint-disable-line import/prefer-default-export,no-use-before-define

@@ -33,16 +33,25 @@ class Recipe(Model):
     """
     Our base model for a recipe.
     """
-    title = CharField()
+    # Name of the recipe
+    title = CharField(null=True)
+    # URL, should be unique
     url = CharField(null=True, unique=True)
+    # Author
     author = CharField(null=True)
+    # Picture as a binary blob
     picture = BlobField(null=True)
+    # Short description
     short_description = TextField(null=True)
+    # Number of persons as text, as it can be either "N persons" or "N parts"
     nb_person = TextField(null=True)
+    # Preparation and cooking times
     preparation_time = IntegerField(null=True)  # In minutes
     cooking_time = IntegerField(null=True)  # In minutes
+    # List of ingredients
     ingredients = JSONField(null=True)
-    instructions = TextField()
+    # Instructions
+    instructions = TextField(null=True)
 
     class Meta:
         database = database
@@ -70,12 +79,13 @@ class Recipe(Model):
         serialized = model_to_dict(self)
         # Dump picture as a base64 string, compatible with HTML `src` attribute
         # for images.
-        picture_mime = (
-          'data:%s;base64' % magic.from_buffer(serialized['picture'],
-                                               mime=True)
-        )
-        serialized['picture'] = '%s,%s' % (
-            picture_mime,
-            base64.b64encode(serialized['picture']).decode('utf-8')
-        )
+        if serialized['picture']:
+            picture_mime = (
+            'data:%s;base64' % magic.from_buffer(serialized['picture'],
+                                                 mime=True)
+            )
+            serialized['picture'] = '%s,%s' % (
+                picture_mime,
+                base64.b64encode(serialized['picture']).decode('utf-8')
+            )
         return serialized

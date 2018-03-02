@@ -49,7 +49,7 @@ export default {
     fetchRecipes() {
       this.isLoading = true;
 
-      fetch(`${constants.API_URL}/api/v1/recipes`)
+      fetch(`${constants.API_URL}api/v1/recipes`)
         .then(response => response.json())
         .then((response) => {
           this.recipes = response.recipes;

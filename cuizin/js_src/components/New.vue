@@ -122,7 +122,7 @@ export default {
   methods: {
     submitImport() {
       this.disabledImport = true;
-      fetch(`${constants.API_URL}/api/v1/recipes`, {
+      fetch(`${constants.API_URL}api/v1/recipes`, {
         method: 'POST',
         body: JSON.stringify({
           url: this.url,

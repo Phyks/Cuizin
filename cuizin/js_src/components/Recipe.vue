@@ -54,7 +54,7 @@ export default {
     fetchRecipe() {
       this.isLoading = true;
 
-      fetch(`${constants.API_URL}/api/v1/recipe/${this.$route.params.recipeId}`)
+      fetch(`${constants.API_URL}api/v1/recipe/${this.$route.params.recipeId}`)
         .then(response => response.json())
         .then((response) => {
           this.recipe = response.recipes[0];
@@ -62,7 +62,7 @@ export default {
         });
     },
     handleDelete() {
-      fetch(`${constants.API_URL}/api/v1/recipe/${this.$route.params.recipeId}`, {
+      fetch(`${constants.API_URL}api/v1/recipe/${this.$route.params.recipeId}`, {
         method: 'DELETE',
       })
         .then(() => this.$router.replace('/'));
