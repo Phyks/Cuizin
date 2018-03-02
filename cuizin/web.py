@@ -59,7 +59,7 @@ def api_v1_recipes_post():
     """
     Create a new recipe from URL
     """
-    data = json.load(bottle.request.body)
+    data = json.loads(bottle.request.body.read().decode('utf-8'))
     if 'url' not in data:
         return {
             'error': 'No URL provided'
