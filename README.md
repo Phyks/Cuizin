@@ -18,7 +18,7 @@ $ npm run build  # Build the JS dependencies
 Ideally, Python dependencies should be installed in a virtual environment.
 
 If you serve the app from a subdirectory (and not the root of your domain),
-you might want to run `API_URL=/subdir/ npm run build` instead of `npm run
+you might want to run `URL_PREFIX=/subdir/ npm run build` instead of `npm run
 build` to use the correct path to call the API. Note that the trailing slash
 is important.
 
@@ -30,11 +30,13 @@ WSGI to serve the application directly (`application` variable is exported in
 `cuizin/__main__.py`).
 
 You can customize the behavior of the app by passing environment variables:
-* `HOST` to set the host on which the webserver should listen to (defaults to
-  `localhost` only). Use `HOST=0.0.0.0` to make it world-accessible.
-* `PORT` to set the port on which the webserver should listen. Defaults to
-  `8080`.
-* `DEBUG` to enable or disable the debug from Bottle (defaults to `False`).
+* `CUIZIN_HOST` to set the host on which the webserver should listen to
+  (defaults to `localhost` only). Use `HOST=0.0.0.0` to make it
+  world-accessible.
+* `CUIZIN_PORT` to set the port on which the webserver should listen. Defaults
+  to `8080`.
+* `CUIZIN_DEBUG` to enable or disable the debug from Bottle (defaults to
+  `False`).
 * `WEBOOB_MODULES_PATH` to set the path to the local clone of the Weboob
   modules. Default to using the `weboob-modules` package installed by `pip`
   (and which you should regularly update with `pip install --upgrade
