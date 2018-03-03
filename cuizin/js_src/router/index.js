@@ -7,21 +7,21 @@ import Recipe from '@/components/Recipe';
 Vue.use(Router);
 
 export default new Router({
-  routes: [
-    {
-      path: '/',
-      name: 'Home',
-      component: Home,
-    },
-    {
-      path: '/new',
-      name: 'New',
-      component: New,
-    },
-    {
-      path: '/recipe/:recipeId',
-      name: 'Recipe',
-      component: Recipe,
-    },
-  ],
+    routes: [
+        {
+            path: '/',
+            name: 'Home',
+            component: Home,
+        },
+        {
+            path: '/new',
+            name: 'New',
+            component: New,
+        },
+        {
+            path: '/recipe/:recipeId',
+            name: 'Recipe',
+            component: Recipe,
+        },
+    ],
 });

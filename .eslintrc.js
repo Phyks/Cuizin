@@ -24,6 +24,11 @@ module.exports = {
   },
   // add your custom rules here
   rules: {
+    // Use 4 spaces indent
+    'indent': ['error', 4],
+    'import/prefer-default-export': 'off',
+    'no-console': 'off',
+    'no-underscore-dangle': 'off',
     // don't require .vue extension when importing
     'import/extensions': ['error', 'always', {
       js: 'never',

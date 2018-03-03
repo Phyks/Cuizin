@@ -4,7 +4,7 @@ import os
 import bottle
 
 from cuizin import db
-from cuizin.scraping import add_recipe
+from cuizin.scraping import fetch_recipe
 
 MODULE_DIR = os.path.dirname(os.path.realpath(__file__))
 
@@ -49,7 +49,8 @@ def api_v1_recipes():
 
     return {
         'recipes': [
-            recipe.to_dict() for recipe in db.Recipe.select()
+            recipe.to_dict()
+            for recipe in db.Recipe.select().order_by(db.Recipe.id.desc())
         ]
     }
 
@@ -73,7 +74,7 @@ def api_v1_recipes_post():
         assert recipe
         recipes = [recipe.to_dict()]
     except AssertionError:
-        recipes = [add_recipe(data['url']).to_dict()]
+        recipes = [fetch_recipe(data['url']).to_dict()]
 
     return {
         'recipes': recipes
@@ -94,6 +95,31 @@ def api_v1_recipe(id):
             recipe.to_dict() for recipe in db.Recipe.select().where(
                 db.Recipe.id == id
             )
+        ]
+    }
+
+
+@app.route('/api/v1/recipe/:id/refetch', ['GET', 'OPTIONS'])
+def api_v1_recipe_refetch(id):
+    """
+    Refetch a given recipe.
+    """
+    # CORS
+    if bottle.request.method == 'OPTIONS':
+        return ''
+
+    recipe = db.Recipe.select().where(
+        db.Recipe.id == id
+    ).first()
+    if not recipe:
+        # TODO: Error
+        pass
+
+    recipe = fetch_recipe(recipe.url, recipe=recipe)
+
+    return {
+        'recipes': [
+            recipe.to_dict()
         ]
     }
 

@@ -15,11 +15,12 @@ from cuizin import db
 BACKENDS = ['750g', 'allrecipes', 'cuisineaz', 'marmiton', 'supertoinette']
 
 
-def add_recipe(url):
+def fetch_recipe(url, recipe=None):
     """
     Add a recipe, trying to scrape from a given URL.
 
     :param url: URL of the recipe.
+    :param recipe: An optional recipe object to update.
     :return: A ``cuizin.db.Recipe`` model.
     """
     # Eventually load modules from a local clone
@@ -36,22 +37,20 @@ def add_recipe(url):
         for module in BACKENDS
     ]
 
+    # Create a new Recipe object if none is given
+    if not recipe:
+        recipe = db.Recipe()
+
     # Try to fetch the recipe with a Weboob backend
-    recipe = None
     for backend in backends:
         browser = backend.browser
         if url.startswith(browser.BASEURL):
             browser.location(url)
-            recipe = db.Recipe.from_weboob(browser.page.get_recipe())
-            # Ensure URL is set
-            recipe.url = url
+            recipe.update_from_weboob(browser.page.get_recipe())
             break
 
-    # If we could not scrape anything, simply create an empty recipe storing
-    # the URL.
-    if not recipe:
-        recipe = db.Recipe()
-        recipe.url = url
+    # Ensure URL is set
+    recipe.url = url
 
     recipe.save()
     return recipe
