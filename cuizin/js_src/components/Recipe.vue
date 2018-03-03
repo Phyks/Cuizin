@@ -27,7 +27,7 @@
               </li>
           </ul>
           <h2 class="mt-3">Instructions</h2>
-          <p>{{ recipe.instructions }}</p>
+          <nl2br tag="p" :text="recipe.instructions"></nl2br>
           <p v-if="recipe.url" class="text-xs-center">
               <v-btn :href="recipe.url">
                   <v-icon class="fa-icon">fa-external-link</v-icon>
