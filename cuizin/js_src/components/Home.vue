@@ -4,7 +4,10 @@
       <v-flex
         v-for="recipe in recipes"
         :key="recipe.title"
-        xs3
+        xs12
+        sm6
+        md3
+        lg2
       >
         <v-card :to="{name: 'Recipe', params: { recipeId: recipe.id }}">
           <v-card-media :src="recipe.picture" height="200px"></v-card-media>

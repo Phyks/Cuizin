@@ -1,32 +1,40 @@
 <template>
-  <v-container grid-list-md>
-    <v-layout row wrap>
-      <v-flex xs6 offset-xs3>
+  <v-container grid-list-md class="panel">
+    <v-layout row>
+      <v-flex xs12 v-if="recipe">
           <h1 class="text-xs-center mt-3 mb-3">
-              {{ this.recipe.title }}
-              <v-btn @click="handleDelete">Delete</v-btn>
+              {{ recipe.title }}
           </h1>
-          <p class="text-xs-center">
-              <img :src="this.recipe.picture" />
+          <p>
           </p>
-          <v-layout row text-xs-center>
+          <p class="text-xs-center">
+              <img :src="recipe.picture" />
+          </p>
+          <v-layout row class="text-xs-center">
             <v-flex xs6>
-              <p><v-icon>timelapse</v-icon> {{ recipe.preparation_time }} mins</p>
+                <p>{{ recipe.nb_person }}</p>
             </v-flex>
             <v-flex xs6>
-              <p><v-icon>whatshot</v-icon> {{ recipe.cooking_time }} mins</p>
+              <p><v-icon>timelapse</v-icon> Preparation: {{ recipe.preparation_time }}&nbsp;mins</p>
+              <p><v-icon>whatshot</v-icon> Cooking: {{ recipe.cooking_time }}&nbsp;mins</p>
             </v-flex>
           </v-layout>
-          <ul>
-            <li v-for="ingredient in this.recipe.ingredients">
-              {{ ingredient }}
-            </li>
+          <p>{{ recipe.short_description }}</p>
+          <h2>Ingredients</h2>
+          <ul class="ml-5">
+              <li v-for="ingredient in recipe.ingredients">
+                  {{ ingredient }}
+              </li>
           </ul>
-          <p>{{ this.recipe.nb_person }}</p>
-          <p>{{ this.recipe.short_description }}</p>
-          <p>{{ this.recipe.instructions }}</p>
-          <p v-if="this.recipe.url">
-              <a :href="this.recipe.url">Original link</a>
+          <h2 class="mt-3">Instructions</h2>
+          <p>{{ recipe.instructions }}</p>
+          <p v-if="recipe.url" class="text-xs-center">
+              <v-btn :href="recipe.url">
+                  <v-icon class="fa-icon">fa-external-link</v-icon>
+              </v-btn>
+              <v-btn @click="handleDelete">
+                  <v-icon>delete</v-icon>
+              </v-btn>
           </p>
       </v-flex>
     </v-layout>
@@ -73,6 +81,14 @@ export default {
 
 <style scoped>
 img {
-    width: 75%;
+    width: 100%;
+}
+
+.panel {
+    max-width: 600px;
+}
+
+.fa-icon {
+    font-size: 20px;
 }
 </style>
