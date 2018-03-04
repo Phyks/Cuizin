@@ -2,6 +2,8 @@
     <v-container fluid grid-list-md>
         <Loader v-if="isLoading"></Loader>
         <v-layout row wrap v-else>
+            <ErrorDialog :v-model="error" description="Unable to load recipes: " />
+
             <v-flex xs12 v-if="!recipes.length" class="text-xs-center">
                 <p>Start by adding a recipe with the "+" button on the top right corner!</p>
             </v-flex>
@@ -32,16 +34,20 @@
 </template>
 
 <script>
-import * as constants from '@/constants';
+import * as api from '@/api';
+
+import ErrorDialog from '@/components/ErrorDialog';
 import Loader from '@/components/Loader';
 
 export default {
     components: {
+        ErrorDialog,
         Loader,
     },
     data() {
         return {
             isLoading: false,
+            error: null,
             recipes: [],
         };
     },
@@ -56,10 +62,13 @@ export default {
         fetchRecipes() {
             this.isLoading = true;
 
-            fetch(`${constants.API_URL}api/v1/recipes`)
-                .then(response => response.json())
+            api.loadRecipes()
                 .then((response) => {
                     this.recipes = response.recipes;
+                    this.isLoading = false;
+                })
+                .catch((error) => {
+                    this.error = error;
                     this.isLoading = false;
                 });
         },

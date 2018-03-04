@@ -2,6 +2,7 @@ import json
 import os
 
 import bottle
+import peewee
 
 from cuizin import db
 from cuizin.scraping import fetch_recipe
@@ -11,7 +12,7 @@ MODULE_DIR = os.path.dirname(os.path.realpath(__file__))
 
 app = bottle.Bottle()
 
-@app.hook('after_request')
+@app.hook('before_request')
 def enable_cors():
     """
     Add CORS headers at each request.
@@ -66,19 +67,17 @@ def api_v1_recipes_post():
             'error': 'No URL provided'
         }
 
-    recipes = []
     try:
+        # Try to add
+        return {
+            'recipes': [fetch_recipe(data['url']).to_dict()]
+        }
+    except peewee.IntegrityError:
+        # Redirect to pre-existing recipe if already there
         recipe = db.Recipe.select().where(
             db.Recipe.url == data['url']
         ).first()
-        assert recipe
-        recipes = [recipe.to_dict()]
-    except AssertionError:
-        recipes = [fetch_recipe(data['url']).to_dict()]
-
-    return {
-        'recipes': recipes
-    }
+        bottle.redirect('/api/v1/recipe/%s' % recipe.id, 301)
 
 
 @app.route('/api/v1/recipe/:id', ['GET', 'OPTIONS'])
@@ -112,8 +111,7 @@ def api_v1_recipe_refetch(id):
         db.Recipe.id == id
     ).first()
     if not recipe:
-        # TODO: Error
-        pass
+        return bottle.abort(400, 'No recipe with id %s.' % id)
 
     recipe = fetch_recipe(recipe.url, recipe=recipe)
 

@@ -1,6 +1,17 @@
 <template>
-    <v-container text-xs-center>
+    <v-container text-xs-center v-if="isImporting">
         <v-layout row wrap>
+            <Loader></Loader>
+
+            <v-flex xs12>
+                <p>Importing...</p>
+            </v-flex>
+        </v-layout>
+    </v-container>
+    <v-container text-xs-center v-else>
+        <v-layout row wrap>
+            <ErrorDialog v-model="error" description="Unable to import recipe: " />
+
             <v-flex xs12>
                 <h2>Import from URL</h2>
                 <v-form v-model="validImport">
@@ -12,7 +23,7 @@
                         ></v-text-field>
                     <v-btn
                         @click="submitImport"
-                        :disabled="!validImport || disabledImport"
+                        :disabled="!validImport || isImporting"
                         >
                         Import
                     </v-btn>
@@ -87,15 +98,23 @@
 </template>
 
 <script>
-import * as constants from '@/constants';
+import * as api from '@/api';
+
+import ErrorDialog from '@/components/ErrorDialog';
+import Loader from '@/components/Loader';
 
 
 export default {
+    components: {
+        ErrorDialog,
+        Loader,
+    },
     data() {
         return {
+            error: null,
             url: null,
             validImport: false,
-            disabledImport: false,
+            isImporting: false,
             validAdd: false,
             title: null,
             picture: null,
@@ -121,21 +140,18 @@ export default {
     },
     methods: {
         submitImport() {
-            this.disabledImport = true;
-            fetch(`${constants.API_URL}api/v1/recipes`, {
-                method: 'POST',
-                body: JSON.stringify({
-                    url: this.url,
-                }),
-            })
-                .then(response => response.json())
-                .then(response => response.recipes[0])
-                .then(recipe => this.$router.push({
+            this.isImporting = true;
+            api.postRecipe({ url: this.url })
+                .then(response => this.$router.push({
                     name: 'Recipe',
                     params: {
-                        recipeId: recipe.id,
+                        recipeId: response.recipes[0].id,
                     },
-                }));
+                }))
+                .catch((error) => {
+                    this.isImporting = false;
+                    this.error = error;
+                });
         },
         submitAdd() {
             // TODO

@@ -2,6 +2,10 @@
     <v-container grid-list-md class="panel">
         <Loader v-if="isLoading"></Loader>
         <v-layout row v-else>
+            <ErrorDialog :v-model="errorDelete" description="Unable to delete recipe: " />
+            <ErrorDialog :v-model="errorFetch" description="Unable to fetch recipe: " />
+            <ErrorDialog :v-model="errorRefetch" description="Unable to refetch recipe: " />
+
             <v-dialog v-model="refetchConfirm" max-width="500px">
                 <v-card>
                     <v-card-title class="headline">Refetch recipe</v-card-title>
@@ -74,58 +78,74 @@
 </template>
 
 <script>
-import * as constants from '@/constants';
+import * as api from '@/api';
+
+import ErrorDialog from '@/components/ErrorDialog';
 import Loader from '@/components/Loader';
 
 export default {
     components: {
+        ErrorDialog,
         Loader,
     },
     data() {
         return {
             isLoading: false,
             recipe: null,
+            errorFetch: null,
+            errorDelete: null,
+            errorRefetch: null,
             deleteConfirm: false,
             refetchConfirm: false,
         };
     },
     created() {
-        this.fetchRecipe();
+        this.loadRecipe();
     },
     watch: {
         // call again the method if the route changes
-        $route: 'fetchRecipe',
+        $route: 'loadRecipe',
     },
     methods: {
         handleRecipesResponse(response) {
+            if (response.recipes.length < 1) {
+                this.$router.replace({
+                    name: 'Home',
+                });
+            }
             this.recipe = response.recipes[0];
-            this.recipe.instructions = this.recipe.instructions.split(/\r\n/).map(item => item.trim());
             this.isLoading = false;
         },
-        fetchRecipe() {
+        loadRecipe() {
             this.isLoading = true;
 
-            fetch(`${constants.API_URL}api/v1/recipe/${this.$route.params.recipeId}`)
-                .then(response => response.json())
-                .then(this.handleRecipesResponse);
+            api.loadRecipe(this.$route.params.recipeId)
+                .then(this.handleRecipesResponse)
+                .catch((error) => {
+                    this.isLoading = false;
+                    this.errorFetch = error;
+                });
         },
         handleDelete() {
             this.isLoading = true;
             this.deleteConfirm = false;
-            fetch(`${constants.API_URL}api/v1/recipe/${this.$route.params.recipeId}`, {
-                method: 'DELETE',
-            })
-                .then(() => this.$router.replace('/'));
+            api.deleteRecipe(this.$route.params.recipeId)
+                .then(() => this.$router.replace('/'))
+                .catch((error) => {
+                    this.isLoading = false;
+                    this.errorDelete = error;
+                });
         },
         handleRefetch() {
             this.isLoading = true;
             this.refetchConfirm = false;
 
-            fetch(`${constants.API_URL}api/v1/recipe/${this.$route.params.recipeId}/refetch`, {
-                method: 'GET',
-            })
-                .then(response => response.json())
-                .then(this.handleRecipesResponse);
+            api.refetchRecipe(this.$route.params.recipeId)
+                .then(this.handleRecipesResponse)
+                .catch((error) => {
+                    this.isLoading = false;
+                    this.errorRefetch = error;
+                });
         },
     },
 };
