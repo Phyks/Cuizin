@@ -8,9 +8,11 @@ add new recipes.
 
 ## Installation
 
+Cuizin requires Python 3 and may not be compatible with Python 2.
+
 ```
 $ git clone …  # Clone this repository
-$ pip install -r requirements.txt  # Install Python dependencies
+$ pip3 install -r requirements.txt  # Install Python dependencies
 $ npm install  # Install JS dependencies for the frontend
 $ npm run build  # Build the JS dependencies
 ```
