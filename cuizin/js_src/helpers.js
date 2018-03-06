@@ -39,6 +39,13 @@ export function getBestMatchingLocale(messages, defaultLocale = 'en') {
 
     let bestLocale = defaultLocale;
     // Get best matching locale
-    locales.some(locale => (messages[locale] && (bestLocale = locale)));
+    locales.some((locale) => {
+        if (messages[locale]) {
+            bestLocale = locale;
+            // Stop at first matching locale
+            return true;
+        }
+        return false;
+    });
     return bestLocale;
 }
