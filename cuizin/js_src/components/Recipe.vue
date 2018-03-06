@@ -8,26 +8,26 @@
 
             <v-dialog v-model="refetchConfirm" max-width="500px">
                 <v-card>
-                    <v-card-title class="headline">Refetch recipe</v-card-title>
+                    <v-card-title class="headline">{{ $t('recipe.refetch_recipe') }}</v-card-title>
                     <v-card-text>
-                        This will refetch the recipe from the website and replace all current data with newly fetched ones. Are you sure?
+                        {{ $t('recipe.refetch_recipe_description') }}
                     </v-card-text>
                     <v-card-actions>
                         <v-spacer></v-spacer>
-                        <v-btn color="secondary" flat @click.stop="refetchConfirm=false">Cancel</v-btn>
-                        <v-btn color="error" flat @click.stop="handleRefetch">Refetch</v-btn>
+                        <v-btn color="secondary" flat @click.stop="refetchConfirm=false">{{ $t('misc.cancel') }}</v-btn>
+                        <v-btn color="error" flat @click.stop="handleRefetch">{{ $t('recipe.refetch') }}</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-dialog>
 
             <v-dialog v-model="deleteConfirm" max-width="500px">
                 <v-card>
-                    <v-card-title class="headline">Delete recipe</v-card-title>
-                    <v-card-text>This will delete this recipe. Are you sure?</v-card-text>
+                    <v-card-title class="headline">{{ $t('recipe.delete_recipe') }}</v-card-title>
+                    <v-card-text>{{ $t('recipe.delete_recipe_description') }}</v-card-text>
                     <v-card-actions>
                         <v-spacer></v-spacer>
-                        <v-btn color="secondary" flat @click.stop="deleteConfirm=false">Cancel</v-btn>
-                        <v-btn color="error" flat @click.stop="handleDelete">Delete</v-btn>
+                        <v-btn color="secondary" flat @click.stop="deleteConfirm=false">{{ $t('misc.cancel') }}</v-btn>
+                        <v-btn color="error" flat @click.stop="handleDelete">{{ $t('recipe.delete') }}</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-dialog>
@@ -46,29 +46,29 @@
                         <p>{{ recipe.nb_person }}</p>
                     </v-flex>
                     <v-flex xs6>
-                        <p><v-icon>timelapse</v-icon> Preparation: {{ recipe.preparation_time }}&nbsp;mins</p>
-                        <p><v-icon>whatshot</v-icon> Cooking: {{ recipe.cooking_time }}&nbsp;mins</p>
+                        <p><v-icon>timelapse</v-icon> {{ $t('recipe.preparation') }} {{ $tc('misc.Nmins', recipe.preparation_time, { count: recipe.preparation_time }) }}</p>
+                        <p><v-icon>whatshot</v-icon> {{ $t('recipe.cooking') }} {{ $tc('misc.Nmins', recipe.cooking_time, { count: recipe.cooking_time }) }}</p>
                     </v-flex>
                 </v-layout>
                 <p>{{ recipe.short_description }}</p>
-                <h2>Ingredients</h2>
+                <h2>{{ $t('recipe.ingredients') }}</h2>
                 <ul class="ml-5">
                     <li v-for="ingredient in recipe.ingredients">
                         {{ ingredient }}
                     </li>
                 </ul>
-                <h2 class="mt-3">Instructions</h2>
+                <h2 class="mt-3">{{ $t('recipe.instructions') }}</h2>
                 <p v-for="item in recipe.instructions">
                     {{ item }}
                 </p>
                 <p v-if="recipe.url" class="text-xs-center">
-                    <v-btn :href="recipe.url">
+                    <v-btn :href="recipe.url" :title="$t('recipe.website')">
                         <v-icon class="fa-icon">fa-external-link</v-icon>
                     </v-btn>
-                    <v-btn @click.stop="deleteConfirm = true">
+                    <v-btn @click.stop="deleteConfirm = true" :title="$t('recipe.delete')">
                         <v-icon>delete</v-icon>
                     </v-btn>
-                    <v-btn @click.stop="refetchConfirm = true">
+                    <v-btn @click.stop="refetchConfirm = true" :title="$t('recipe.refetch')">
                         <v-icon>autorenew</v-icon>
                     </v-btn>
                 </p>

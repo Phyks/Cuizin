@@ -4,16 +4,16 @@
             <Loader></Loader>
 
             <v-flex xs12>
-                <p>Importing...</p>
+                <p>{{ $t('new.importing') }}</p>
             </v-flex>
         </v-layout>
     </v-container>
     <v-container text-xs-center v-else>
         <v-layout row wrap>
-            <ErrorDialog v-model="error" description="Unable to import recipe: " />
+            <ErrorDialog v-model="error" :description="$t('error.unable_import_recipe')" />
 
             <v-flex xs12>
-                <h2>Import from URL</h2>
+                <h2>{{ $t('new.import_from_url') }}</h2>
                 <v-form v-model="validImport">
                     <v-text-field
                         label="URL"
@@ -25,61 +25,61 @@
                         @click="submitImport"
                         :disabled="!validImport || isImporting"
                         >
-                        Import
+                        {{ $t('new.import') }}
                     </v-btn>
                 </v-form>
             </v-flex>
         </v-layout>
         <v-layout row wrap mt-5 v-if="featureAddManually">
             <v-flex xs12>
-                <h2>Add manually</h2>
+                <h2>{{ $t('new.add_manually') }}</h2>
                 <v-form v-model="validAdd">
                     <v-text-field
-                        label="Title"
+                        :label="$t('new.title')"
                         v-model="title"
                         required
                         ></v-text-field>
                     <v-text-field
-                        label="Picture"
+                        :label="$t('new.picture')"
                         v-model="picture"
                         ></v-text-field>
                     <v-text-field
-                        label="Short description"
+                        :label="$t('new.short_description')"
                         v-model="short_description"
                         textarea
                         ></v-text-field>
                     <v-layout row>
                         <v-flex xs4 mr-3>
                             <v-text-field
-                                label="Number of persons"
+                                :label="$t('new.nb_persons')"
                                 v-model="nb_person"
                                 type="number"
                                 ></v-text-field>
                         </v-flex>
                         <v-flex xs4 mx-3>
                             <v-text-field
-                                label="Preparation time"
+                                :label="$t('new.preparation_time')"
                                 v-model="preparation_time"
                                 type="number"
-                                suffix="mins"
+                                :suffix="$t('new.mins')"
                                 ></v-text-field>
                         </v-flex>
                         <v-flex xs4 ml-3>
                             <v-text-field
-                                label="Cooking time"
+                                :label="$t('new.cooking_time')"
                                 v-model="cooking_time"
                                 type="number"
-                                suffix="mins"
+                                :suffix="$t('new.mins')"
                                 ></v-text-field>
                         </v-flex>
                     </v-layout>
                     <v-text-field
-                        label="Ingredients"
+                        :label="$t('new.ingredients')"
                         v-model="ingredients"
                         textarea
                         ></v-text-field>
                     <v-text-field
-                        label="Instructions"
+                        :label="$t('new.instructions')"
                         v-model="instructions"
                         textarea
                         required
@@ -89,7 +89,7 @@
                         @click="submitAdd"
                         :disabled="!validAdd"
                         >
-                        Add
+                        {{ $t('new.add') }}
                     </v-btn>
                 </v-form>
             </v-flex>

@@ -2,10 +2,10 @@
     <v-container fluid grid-list-md>
         <Loader v-if="isLoading"></Loader>
         <v-layout row wrap v-else>
-            <ErrorDialog :v-model="error" description="Unable to load recipes: " />
+            <ErrorDialog :v-model="error" :description="$t('error.unable_load_recipes')" />
 
             <v-flex xs12 v-if="!recipes.length" class="text-xs-center">
-                <p>Start by adding a recipe with the "+" button on the top right corner!</p>
+              <p>{{ $t('home.onboarding') }}</p>
             </v-flex>
             <v-flex
                 v-for="recipe in recipes"
@@ -21,10 +21,10 @@
                     <p>{{ recipe.short_description }}</p>
                     <v-layout row text-xs-center>
                         <v-flex xs6>
-                            <p><v-icon>timelapse</v-icon> {{ recipe.preparation_time }} mins</p>
+                          <p><v-icon>timelapse</v-icon> {{ $tc('misc.Nmins', recipe.preparation_time, { count: recipe.preparation_time }) }}</p>
                         </v-flex>
                         <v-flex xs6>
-                            <p><v-icon>whatshot</v-icon> {{ recipe.cooking_time }} mins</p>
+                            <p><v-icon>whatshot</v-icon> {{ $tc('misc.Nmins', recipe.cooking_time, { count: recipe.cooking_time }) }}</p>
                         </v-flex>
                     </v-layout>
                 </v-card>

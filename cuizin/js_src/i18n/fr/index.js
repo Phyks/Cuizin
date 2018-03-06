@@ -1,0 +1,43 @@
+export default {
+    error: {
+        title: 'Erreur',
+        unable_import_recipe: 'Impossible d\'importer la recette : ',
+        unable_load_recipes: 'Impossible de charger les recettes : ',
+    },
+    home: {
+        onboarding: 'Commencez par ajouter une recette avec le bouton "+" dans le coin supérieur droit !',
+    },
+    misc: {
+        cancel: 'Annuler',
+        Nmins: '1 min | {count} mins',
+    },
+    new: {
+        add: 'Ajouter',
+        add_manually: 'Ajouter manuellement',
+        cooking_time: 'Temps de cuisson',
+        import: 'Importer',
+        import_from_url: 'Importer depuis l\'URL',
+        importing: 'En cours d\'import…',
+        ingredients: 'Ingrédients',
+        instructions: 'Instructions',
+        mins: 'mins',
+        nb_opersons: 'Nombre de personnes',
+        picture: 'Photo',
+        preparation_time: 'Temps de préparation',
+        short_description: 'Description brève',
+        title: 'Titre',
+    },
+    recipe: {
+        cooking: 'Cuisson :',
+        delete: 'Supprimer',
+        delete_recipe: 'Suppression d\'une recette',
+        delete_recipe_description: 'Vous allez supprimer cette recette. En êtes-vous sûr ?',
+        ingredients: 'Ingrédients',
+        instructions: 'Instructions',
+        preparation: 'Préparation :',
+        refetch: 'Réactualiser',
+        refetch_recipe: 'Réactualiser la recette',
+        refetch_recipe_description: 'Vous allez remplacer le contenu de cette recette par des données à jour récupérées depuis le site web de la recette. En êtes-vous sûr ?',
+        website: 'Page de la recette',
+    },
+};
