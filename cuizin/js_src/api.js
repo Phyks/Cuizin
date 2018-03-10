@@ -16,7 +16,7 @@ function _postProcessRecipes(response) {
                 parsed.recipes = parsed.recipes.map(item => Object.assign(
                     item,
                     {
-                        instructions: item.instructions.split(/\r\n/).map(
+                        instructions: item.instructions.split(/[\r\n]\n/).map(
                             line => line.trim(),
                         ),
                     },
@@ -48,8 +48,17 @@ export function refetchRecipe(id) {
 }
 
 
-export function postRecipe(recipe) {
-    return fetch(`${constants.API_URL}api/v1/recipes`, {
+export function postRecipeByUrl(recipe) {
+    return fetch(`${constants.API_URL}api/v1/recipes/by_url`, {
+        method: 'POST',
+        body: JSON.stringify(recipe),
+    })
+        .then(_postProcessRecipes);
+}
+
+
+export function postRecipeManually(recipe) {
+    return fetch(`${constants.API_URL}api/v1/recipes/manually`, {
         method: 'POST',
         body: JSON.stringify(recipe),
     })

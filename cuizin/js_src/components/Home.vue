@@ -12,7 +12,7 @@
                 :key="recipe.title"
                 xs12 sm6 md3 lg2>
                 <v-card :to="{name: 'Recipe', params: { recipeId: recipe.id }}">
-                    <v-card-media :src="recipe.picture" height="200px"></v-card-media>
+                    <v-card-media :src="recipe.picture" height="200px" class="grey"></v-card-media>
                     <v-card-title primary-title>
                         <div>
                             <h3 class="headline mb-0">{{ recipe.title }}</h3>
@@ -21,10 +21,10 @@
                     <p>{{ recipe.short_description }}</p>
                     <v-layout row text-xs-center>
                         <v-flex xs6>
-                          <p><v-icon>timelapse</v-icon> {{ $tc('misc.Nmins', recipe.preparation_time, { count: recipe.preparation_time }) }}</p>
+                          <p><v-icon>timelapse</v-icon> {{ $tc('misc.Nmins', recipe.preparation_time, { count: recipe.preparation_time ? recipe.preparation_time : '?' }) }}</p>
                         </v-flex>
                         <v-flex xs6>
-                            <p><v-icon>whatshot</v-icon> {{ $tc('misc.Nmins', recipe.cooking_time, { count: recipe.cooking_time }) }}</p>
+                            <p><v-icon>whatshot</v-icon> {{ $tc('misc.Nmins', recipe.cooking_time, { count: recipe.cooking_time ? recipe.cooking_time : '?' }) }}</p>
                         </v-flex>
                     </v-layout>
                 </v-card>

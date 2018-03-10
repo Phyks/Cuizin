@@ -28,4 +28,9 @@ export default {
     color: rgba(0,0,0,.87);
     text-decoration: none;
 }
+
+.panel {
+    max-width: 600px;
+}
+
 </style>

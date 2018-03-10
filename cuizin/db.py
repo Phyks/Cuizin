@@ -56,21 +56,31 @@ class Recipe(Model):
     class Meta:
         database = database
 
-    def update_from_weboob(self, weboob_obj):
+    def update_from_dict(self, d):
         """
-        Update fields taking values from the Weboob object.
+        Update field taking values from a dict of values.
         """
         # Set fields
         for field in ['title', 'url', 'author', 'picture_url',
                       'short_description', 'preparation_time', 'cooking_time',
-                      'ingredients', 'instructions']:
-            value = getattr(weboob_obj, field)
+                      'ingredients', 'instructions', 'nb_person']:
+            value = d.get(field, None)
             if value:
                 setattr(self, field, value)
-        # Serialize number of person
-        self.nb_person = '-'.join(str(num) for num in weboob_obj.nb_person)
         # Download picture and save it as a blob
-        self.picture = requests.get(weboob_obj.picture_url).content
+        if d.get('picture_url', None):
+            self.picture = requests.get(d['picture_url']).content
+
+    def update_from_weboob(self, weboob_obj):
+        """
+        Update fields taking values from the Weboob object.
+        """
+        weboob_dict = dict(weboob_obj.iter_fields())
+        if weboob_dict.get('nb_person', None):
+            weboob_dict['nb_person'] = '-'.join(
+                str(num) for num in weboob_dict['nb_person']
+            )
+        self.update_from_dict(weboob_dict)
 
     def to_dict(self):
         """

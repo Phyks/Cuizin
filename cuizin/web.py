@@ -56,8 +56,8 @@ def api_v1_recipes():
     }
 
 
-@app.post('/api/v1/recipes')
-def api_v1_recipes_post():
+@app.post('/api/v1/recipes/by_url')
+def api_v1_recipes_post_by_url():
     """
     Create a new recipe from URL
     """
@@ -78,6 +78,27 @@ def api_v1_recipes_post():
             db.Recipe.url == data['url']
         ).first()
         bottle.redirect('/api/v1/recipe/%s' % recipe.id, 301)
+
+
+@app.post('/api/v1/recipes/manually')
+def api_v1_recipes_post_manual():
+    """
+    Create a new recipe manually
+    """
+    data = json.loads(bottle.request.body.read().decode('utf-8'))
+
+    try:
+        # Try to add
+        recipe = db.Recipe()
+        recipe.update_from_dict(data)
+        recipe.save()
+        return {
+            'recipes': [recipe.to_dict()]
+        }
+    except peewee.IntegrityError:
+        return {
+            'error': 'Duplicate recipe.'
+        }
 
 
 @app.route('/api/v1/recipe/:id', ['GET', 'OPTIONS'])

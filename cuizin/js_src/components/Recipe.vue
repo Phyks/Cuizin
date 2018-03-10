@@ -46,23 +46,26 @@
                         <p>{{ recipe.nb_person }}</p>
                     </v-flex>
                     <v-flex xs6>
-                        <p><v-icon>timelapse</v-icon> {{ $t('recipe.preparation') }} {{ $tc('misc.Nmins', recipe.preparation_time, { count: recipe.preparation_time }) }}</p>
-                        <p><v-icon>whatshot</v-icon> {{ $t('recipe.cooking') }} {{ $tc('misc.Nmins', recipe.cooking_time, { count: recipe.cooking_time }) }}</p>
+                        <p><v-icon>timelapse</v-icon> {{ $t('recipe.preparation') }} {{ $tc('misc.Nmins', recipe.preparation_time, { count: recipe.preparation_time ? recipe.preparation_time : '?' }) }}</p>
+                        <p><v-icon>whatshot</v-icon> {{ $t('recipe.cooking') }} {{ $tc('misc.Nmins', recipe.cooking_time, { count: recipe.cooking_time ? recipe.cooking_time : '?' }) }}</p>
                     </v-flex>
                 </v-layout>
                 <p>{{ recipe.short_description }}</p>
+
                 <h2>{{ $t('recipe.ingredients') }}</h2>
-                <ul class="ml-5">
+                <ul class="ml-5" v-if="recipe.ingredients && recipe.ingredients.length">
                     <li v-for="ingredient in recipe.ingredients">
                         {{ ingredient }}
                     </li>
                 </ul>
+                <p class="ml-5 my-3" v-else>{{ $t('new.none') }}</p>
+
                 <h2 class="mt-3">{{ $t('recipe.instructions') }}</h2>
                 <p v-for="item in recipe.instructions">
                     {{ item }}
                 </p>
-                <p v-if="recipe.url" class="text-xs-center">
-                    <v-btn :href="recipe.url" :title="$t('recipe.website')">
+                <p class="text-xs-center">
+                    <v-btn :href="recipe.url" :title="$t('recipe.website')" v-if="recipe.url">
                         <v-icon class="fa-icon">fa-external-link</v-icon>
                     </v-btn>
                     <v-btn @click.stop="deleteConfirm = true" :title="$t('recipe.delete')">
@@ -154,10 +157,6 @@ export default {
 <style scoped>
 img {
     width: 100%;
-}
-
-.panel {
-    max-width: 600px;
 }
 
 .fa-icon {
