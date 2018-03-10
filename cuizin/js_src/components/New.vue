@@ -137,7 +137,7 @@ export default {
                     new URL(v);  // eslint-disable-line no-new
                     return true;
                 } catch (e) {
-                    return $t('new.url_must_be_valid');
+                    return this.$t('new.url_must_be_valid');
                 }
             },
         ];
@@ -158,7 +158,7 @@ export default {
             instructions: null,
             requiredUrlRules: Array.concat(
                 [],
-                [v => !!v || $t('new.url_is_required')],
+                [v => !!v || this.$t('new.url_is_required')],
                 urlRules,
             ),
             urlRules,
