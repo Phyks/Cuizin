@@ -33,7 +33,7 @@ WSGI to serve the application directly (`application` variable is exported in
 
 You can customize the behavior of the app by passing environment variables:
 * `CUIZIN_HOST` to set the host on which the webserver should listen to
-  (defaults to `localhost` only). Use `HOST=0.0.0.0` to make it
+  (defaults to `localhost` only). Use `CUIZIN_HOST=0.0.0.0` to make it
   world-accessible.
 * `CUIZIN_PORT` to set the port on which the webserver should listen. Defaults
   to `8080`.
