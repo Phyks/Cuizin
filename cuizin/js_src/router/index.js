@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Home from '@/components/Home';
-import New from '@/components/New';
-import Recipe from '@/components/Recipe';
+import Home from '@/views/Home';
+import New from '@/views/New';
+import Recipe from '@/views/Recipe';
 
 Vue.use(Router);
 
