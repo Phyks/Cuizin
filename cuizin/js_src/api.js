@@ -16,9 +16,9 @@ function _postProcessRecipes(response) {
                 parsed.recipes = parsed.recipes.map(item => Object.assign(
                     item,
                     {
-                        instructions: item.instructions.split(/[\r\n]\n/).map(
+                        instructions: item.instructions ? item.instructions.split(/[\r\n]\n/).map(
                             line => line.trim(),
-                        ),
+                        ) : [],
                     },
                 ));
             }
