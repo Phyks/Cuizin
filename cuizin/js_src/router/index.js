@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import Router from 'vue-router';
+
 import Home from '@/views/Home';
+import Edit from '@/views/Edit';
 import New from '@/views/New';
 import Recipe from '@/views/Recipe';
 
@@ -22,6 +24,11 @@ export default new Router({
             path: '/recipe/:recipeId',
             name: 'Recipe',
             component: Recipe,
+        },
+        {
+            path: '/edit/:recipeId',
+            name: 'Edit',
+            component: Edit,
         },
     ],
 });

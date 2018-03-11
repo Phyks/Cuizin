@@ -119,6 +119,32 @@ def api_v1_recipe(id):
     }
 
 
+@app.route('/api/v1/recipe/:id', ['POST', 'OPTIONS'])
+def api_v1_recipe_edit(id):
+    """
+    Edit a given recipe from db
+    """
+    # CORS
+    if bottle.request.method == 'OPTIONS':
+        return ''
+
+    data = json.loads(bottle.request.body.read().decode('utf-8'))
+
+    recipe = db.Recipe.select().where(
+        db.Recipe.id == id
+    ).first()
+    if not recipe:
+        return bottle.abort(400, 'No recipe with id %s.' % id)
+    recipe.update_from_dict(data)
+    recipe.save()
+
+    return {
+        'recipes': [
+            recipe.to_dict()
+        ]
+    }
+
+
 @app.route('/api/v1/recipe/:id/refetch', ['GET', 'OPTIONS'])
 def api_v1_recipe_refetch(id):
     """

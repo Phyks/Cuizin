@@ -1,8 +1,11 @@
 export default {
     error: {
         title: 'Error',
+        unable_delete_recipe: 'Unable to delete recipe: ',
+        unable_fetch_recipe: 'Unable to fetch recipe: ',
         unable_import_recipe: 'Unable to import recipe: ',
         unable_load_recipes: 'Unable to load recipes: ',
+        unable_refetch_recipe: 'Unable to refetch recipe: ',
     },
     home: {
         onboarding: 'Start by adding a recipe with the "+" button on the top right corner!',
@@ -16,6 +19,8 @@ export default {
         add_ingredient: 'Add ingredient',
         add_manually: 'Add manually',
         cooking_time: 'Cooking time',
+        edit: 'Edit',
+        edit_recipe: 'Edit recipe',
         import: 'Import',
         import_from_url: 'Import from URL',
         importing: 'Importing…',
@@ -30,6 +35,7 @@ export default {
         short_description: 'Short description',
         title: 'Title',
         title_is_required: 'Title is required',
+        updating: 'Updating…',
         url_is_required: 'URL is required',
         url_must_be_valid: 'URL must be a valid one',
     },
@@ -38,6 +44,7 @@ export default {
         delete: 'Delete',
         delete_recipe: 'Delete recipe',
         delete_recipe_description: 'This will delete this recipe. Are you sure?',
+        edit: 'Edit',
         ingredients: 'Ingredients',
         instructions: 'Instructions',
         none: 'Aucun',

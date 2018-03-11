@@ -1,7 +1,11 @@
 <template>
     <v-flex xs12>
-        <h2>{{ $t('new.add_manually') }}</h2>
-        <v-form v-model="isValidAdd">
+        <ErrorDialog :v-model="error" :description="$t('error.title')" />
+
+        <h2 v-if="recipe">{{ $t('new.edit_recipe') }}</h2>
+        <h2 v-else>{{ $t('new.add_manually') }}</h2>
+
+        <v-form v-model="isValidForm">
             <v-text-field
                 :label="$t('new.title')"
                 v-model="title"
@@ -13,6 +17,9 @@
                 v-model="picture_url"
                 :rules="urlRules"
                 ></v-text-field>
+            <p>
+                <img :src="picture_url" />
+            </p>
             <v-text-field
                 :label="$t('new.short_description')"
                 v-model="short_description"
@@ -72,8 +79,16 @@
                 ></v-text-field>
 
             <v-btn
+                @click="submitEdit"
+                :disabled="!isValidForm || isImporting"
+                v-if="recipe"
+                >
+                {{ $t('new.edit') }}
+            </v-btn>
+            <v-btn
                 @click="submitAdd"
-                :disabled="!isValidAdd || isImporting"
+                :disabled="!isValidForm || isImporting"
+                v-else
                 >
                 {{ $t('new.add') }}
             </v-btn>
@@ -85,8 +100,17 @@
 import * as api from '@/api';
 import * as rules from '@/rules';
 
+import ErrorDialog from '@/components/ErrorDialog';
+
 export default {
+    components: {
+        ErrorDialog,
+    },
     props: {
+        recipe: {
+            default: null,
+            type: Object,
+        },
         value: Boolean,
     },
     computed: {
@@ -100,18 +124,31 @@ export default {
         },
     },
     data() {
+        let defaultPreparationTime = null;
+        if (this.recipe &&
+            this.recipe.preparation_time !== null && this.recipe.preparation_time !== undefined
+        ) {
+            defaultPreparationTime = this.recipe.preparation_time;
+        }
+        let defaultCookingTime = null;
+        if (this.recipe &&
+            this.recipe.cooking_time !== null && this.recipe.cooking_time !== undefined
+        ) {
+            defaultCookingTime = this.recipe.cooking_time;
+        }
         return {
+            error: null,
             url: null,
-            isValidAdd: false,
-            title: null,
-            picture_url: null,
-            short_description: null,
-            nb_person: null,
-            preparation_time: null,
-            cooking_time: null,
+            isValidForm: false,
+            title: (this.recipe && this.recipe.title) || null,
+            picture_url: (this.recipe && this.recipe.picture) || null,
+            short_description: (this.recipe && this.recipe.short_description) || null,
+            nb_person: (this.recipe && this.recipe.nb_person) || null,
+            preparation_time: defaultPreparationTime,
+            cooking_time: defaultCookingTime,
             new_ingredient: null,
-            ingredients: [],
-            instructions: null,
+            ingredients: (this.recipe && this.recipe.ingredients) || [],
+            instructions: (this.recipe && this.recipe.instructions.join('\n\n').replace(/\n{2,}/, '\n\n')) || null,
             urlRules: rules.url,
         };
     },
@@ -149,6 +186,29 @@ export default {
                     this.error = error;
                 });
         },
+        submitEdit() {
+            this.isImporting = true;
+            api.editRecipe(this.recipe.id, {
+                title: this.title,
+                picture_url: this.picture_url,
+                short_description: this.short_description,
+                preparation_time: this.preparation_time,
+                cooking_time: this.cooking_time,
+                nb_person: this.nb_person,
+                ingredients: this.ingredients,
+                instructions: this.instructions,
+            })
+                .then(response => this.$router.push({
+                    name: 'Recipe',
+                    params: {
+                        recipeId: response.recipes[0].id,
+                    },
+                }))
+                .catch((error) => {
+                    this.isImporting = false;
+                    this.error = error;
+                });
+        },
     },
 };
 </script>
@@ -156,5 +216,9 @@ export default {
 <style scoped>
 .transparent {
     background: transparent;
+}
+
+img {
+    max-height: 150px;
 }
 </style>

@@ -2,9 +2,9 @@
     <v-container grid-list-md class="panel">
         <Loader v-if="isLoading"></Loader>
         <v-layout row v-else>
-            <ErrorDialog :v-model="errorDelete" description="Unable to delete recipe: " />
-            <ErrorDialog :v-model="errorFetch" description="Unable to fetch recipe: " />
-            <ErrorDialog :v-model="errorRefetch" description="Unable to refetch recipe: " />
+            <ErrorDialog :v-model="errorDelete" :description="$t('error.unable_delete_recipe')" />
+            <ErrorDialog :v-model="errorFetch" :description="$t('error.unable_fetch_recipe')" />
+            <ErrorDialog :v-model="errorRefetch" :description="$t('error.unable_refetch_recipe')" />
 
             <v-dialog v-model="refetchConfirm" max-width="500px">
                 <v-card>
@@ -46,8 +46,8 @@
                         <p>{{ recipe.nb_person }}</p>
                     </v-flex>
                     <v-flex xs6>
-                        <p><v-icon>timelapse</v-icon> {{ $t('recipe.preparation') }} {{ $tc('misc.Nmins', recipe.preparation_time, { count: recipe.preparation_time ? recipe.preparation_time : '?' }) }}</p>
-                        <p><v-icon>whatshot</v-icon> {{ $t('recipe.cooking') }} {{ $tc('misc.Nmins', recipe.cooking_time, { count: recipe.cooking_time ? recipe.cooking_time : '?' }) }}</p>
+                        <p><v-icon>timelapse</v-icon> {{ $t('recipe.preparation') }} {{ $tc('misc.Nmins', recipe.preparation_time, { count: timeOrUnknown(recipe.preparation_time) }) }}</p>
+                        <p><v-icon>whatshot</v-icon> {{ $t('recipe.cooking') }} {{ $tc('misc.Nmins', recipe.cooking_time, { count: timeOrUnknown(recipe.cooking_time) }) }}</p>
                     </v-flex>
                 </v-layout>
                 <p>{{ recipe.short_description }}</p>
@@ -67,6 +67,9 @@
                 <p class="text-xs-center">
                     <v-btn :href="recipe.url" :title="$t('recipe.website')" v-if="recipe.url">
                         <v-icon class="fa-icon">fa-external-link</v-icon>
+                    </v-btn>
+                    <v-btn :to="{name: 'Edit', params: { recipeId: recipe.id }}" :title="$t('recipe.edit')">
+                        <v-icon>edit</v-icon>
                     </v-btn>
                     <v-btn @click.stop="deleteConfirm = true" :title="$t('recipe.delete')">
                         <v-icon>delete</v-icon>
@@ -110,6 +113,12 @@ export default {
         $route: 'loadRecipe',
     },
     methods: {
+        timeOrUnknown(time) {
+            if (time !== null && time !== undefined) {
+                return time;
+            }
+            return '?';
+        },
         handleRecipesResponse(response) {
             if (response.recipes.length < 1) {
                 this.$router.replace({

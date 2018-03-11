@@ -18,13 +18,15 @@
                             <h3 class="headline mb-0">{{ recipe.title }}</h3>
                         </div>
                     </v-card-title>
-                    <p>{{ recipe.short_description }}</p>
-                    <v-layout row text-xs-center>
-                        <v-flex xs6>
-                          <p><v-icon>timelapse</v-icon> {{ $tc('misc.Nmins', recipe.preparation_time, { count: recipe.preparation_time ? recipe.preparation_time : '?' }) }}</p>
+                    <v-layout row text-xs-center wrap>
+                        <v-flex xs12 v-if="recipe.short_description">
+                            <p>{{ recipe.short_description }}</p>
                         </v-flex>
                         <v-flex xs6>
-                            <p><v-icon>whatshot</v-icon> {{ $tc('misc.Nmins', recipe.cooking_time, { count: recipe.cooking_time ? recipe.cooking_time : '?' }) }}</p>
+                          <p><v-icon>timelapse</v-icon> {{ $tc('misc.Nmins', recipe.preparation_time, { count: timeOrUnknown(recipe.preparation_time) }) }}</p>
+                        </v-flex>
+                        <v-flex xs6>
+                            <p><v-icon>whatshot</v-icon> {{ $tc('misc.Nmins', recipe.cooking_time, { count: timeOrUnknown(recipe.cooking_time) }) }}</p>
                         </v-flex>
                     </v-layout>
                 </v-card>
@@ -71,6 +73,12 @@ export default {
                     this.error = error;
                     this.isLoading = false;
                 });
+        },
+        timeOrUnknown(time) {
+            if (time !== null && time !== undefined) {
+                return time;
+            }
+            return '?';
         },
     },
 };

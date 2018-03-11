@@ -66,6 +66,15 @@ export function postRecipeManually(recipe) {
 }
 
 
+export function editRecipe(id, recipe) {
+    return fetch(`${constants.API_URL}api/v1/recipe/${id}`, {
+        method: 'POST',
+        body: JSON.stringify(recipe),
+    })
+        .then(_postProcessRecipes);
+}
+
+
 export function deleteRecipe(id) {
     return fetch(`${constants.API_URL}api/v1/recipe/${id}`, {
         method: 'DELETE',

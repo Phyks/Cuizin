@@ -40,7 +40,7 @@ class Recipe(Model):
     # Author
     author = CharField(null=True)
     # Picture as a binary blob
-    picture = BlobField(null=True)
+    picture = TextField(null=True)
     # Short description
     short_description = TextField(null=True)
     # Number of persons as text, as it can be either "N persons" or "N parts"
@@ -69,7 +69,18 @@ class Recipe(Model):
                 setattr(self, field, value)
         # Download picture and save it as a blob
         if d.get('picture_url', None):
-            self.picture = requests.get(d['picture_url']).content
+            try:
+                picture = requests.get(d['picture_url']).content
+                picture_mime = (
+                    'data:%s;base64' % magic.from_buffer(picture,
+                                                         mime=True)
+                )
+                self.picture = '%s,%s' % (
+                    picture_mime,
+                    base64.b64encode(picture).decode('utf-8')
+                )
+            except requests.exceptions.InvalidSchema:
+                self.picture = d['picture_url']
 
     def update_from_weboob(self, weboob_obj):
         """
@@ -86,16 +97,4 @@ class Recipe(Model):
         """
         Dict conversion function, for serialization in the API.
         """
-        serialized = model_to_dict(self)
-        # Dump picture as a base64 string, compatible with HTML `src` attribute
-        # for images.
-        if serialized['picture']:
-            picture_mime = (
-            'data:%s;base64' % magic.from_buffer(serialized['picture'],
-                                                 mime=True)
-            )
-            serialized['picture'] = '%s,%s' % (
-                picture_mime,
-                base64.b64encode(serialized['picture']).decode('utf-8')
-            )
-        return serialized
+        return model_to_dict(self)
