@@ -23,7 +23,7 @@
             <v-text-field
                 :label="$t('new.short_description')"
                 v-model="short_description"
-                textarea
+                multi-line
                 ></v-text-field>
             <v-layout row wrap>
                 <v-flex xs12 md5>
@@ -51,16 +51,12 @@
                 <v-flex xs12 class="text-xs-left">
                     <h3>{{ $t('new.ingredients') }}</h3>
                     <v-list v-if="ingredients.length" class="transparent">
-                        <v-list-tile v-for="ingredient in ingredients" :key="ingredient">
-                            <v-list-tile-action>
-                                <v-btn flat icon color="red" v-on:click="() => removeIngredient(ingredient)">
-                                    <v-icon>delete</v-icon>
-                                </v-btn>
-                            </v-list-tile-action>
-                            <v-list-tile-content>
-                                <v-list-tile-title>{{ ingredient }}</v-list-tile-title>
-                            </v-list-tile-content>
-                        </v-list-tile>
+                        <IngredientListTile
+                            v-for="(ingredient, index) in ingredients" :key="index"
+                            :ingredient="ingredient"
+                            :onDelete="() => removeIngredient(index)"
+                            :onEdit="(value) => editIngredient(index, value)"
+                            ></IngredientListTile>
                     </v-list>
                     <p class="ml-5 my-3" v-else>{{ $t('new.none') }}</p>
                     <v-text-field
@@ -74,7 +70,7 @@
                 :label="$t('new.instructions')"
                 v-model="instructions"
                 :rules="[v => !!v || $t('new.instructions_are_required')]"
-                textarea
+                multi-line
                 required
                 ></v-text-field>
 
@@ -97,14 +93,18 @@
 </template>
 
 <script>
+import Vue from 'vue';
+
 import * as api from '@/api';
 import * as rules from '@/rules';
 
 import ErrorDialog from '@/components/ErrorDialog';
+import IngredientListTile from '@/components/IngredientListTile';
 
 export default {
     components: {
         ErrorDialog,
+        IngredientListTile,
     },
     props: {
         recipe: {
@@ -157,11 +157,11 @@ export default {
             this.ingredients.push(this.new_ingredient);
             this.new_ingredient = null;
         },
-        removeIngredient(ingredient) {
-            const index = this.ingredients.indexOf(ingredient);
-            if (index !== -1) {
-                this.ingredients.splice(index, 1);
-            }
+        removeIngredient(index) {
+            Vue.delete(this.ingredients, index);
+        },
+        editIngredient(index, value) {
+            Vue.set(this.ingredients, index, value);
         },
         submitAdd() {
             this.isImporting = true;
