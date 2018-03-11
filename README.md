@@ -49,6 +49,14 @@ If you serve the app with a reverse proxy, you should serve the content of
 Bottle webserver.
 
 
+## Updating
+
+If you are updating the app, the database schema may have changed. There is a
+set of migrations under the `migrations` folder which is a set of standalone
+scripts to run to update your database schema. Each script is named after the
+commit it is handling.
+
+
 ## Contributing
 
 All contributions are welcome, feel free to open a MR. Just in case, if you
