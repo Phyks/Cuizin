@@ -2,9 +2,9 @@
     <v-container grid-list-md class="panel">
         <Loader v-if="isLoading"></Loader>
         <v-layout row v-else>
-            <ErrorDialog :v-model="errorDelete" :description="$t('error.unable_delete_recipe')" />
-            <ErrorDialog :v-model="errorFetch" :description="$t('error.unable_fetch_recipe')" />
-            <ErrorDialog :v-model="errorRefetch" :description="$t('error.unable_refetch_recipe')" />
+            <ErrorDialog v-model="errorDelete" :description="$t('error.unable_delete_recipe')" />
+            <ErrorDialog v-model="errorFetch" :description="$t('error.unable_fetch_recipe')" />
+            <ErrorDialog v-model="errorRefetch" :description="$t('error.unable_refetch_recipe')" />
 
             <v-dialog v-model="refetchConfirm" max-width="500px">
                 <v-card>

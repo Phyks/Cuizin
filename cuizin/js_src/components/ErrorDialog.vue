@@ -17,7 +17,7 @@
 export default {
     props: {
         description: String,
-        value: [Error, Boolean],
+        value: Error,
     },
     computed: {
         error: {

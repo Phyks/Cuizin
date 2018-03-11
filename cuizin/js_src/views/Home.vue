@@ -2,9 +2,9 @@
     <v-container fluid grid-list-md>
         <Loader v-if="isLoading"></Loader>
         <v-layout row wrap v-else>
-            <ErrorDialog :v-model="error" :description="$t('error.unable_load_recipes')" />
+            <ErrorDialog v-model="error" :description="$t('error.unable_load_recipes')" />
 
-            <v-flex xs12 v-if="!recipes.length" class="text-xs-center">
+            <v-flex xs12 v-if="!error && !recipes.length" class="text-xs-center">
               <p>{{ $t('home.onboarding') }}</p>
             </v-flex>
             <v-flex

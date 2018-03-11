@@ -1,6 +1,6 @@
 <template>
     <v-flex xs12>
-        <ErrorDialog :v-model="error" :description="$t('error.title')" />
+        <ErrorDialog v-model="error" :description="$t('error.title')" />
 
         <h2 v-if="recipe">{{ $t('new.edit_recipe') }}</h2>
         <h2 v-else>{{ $t('new.add_manually') }}</h2>
