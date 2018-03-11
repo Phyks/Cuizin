@@ -12,7 +12,8 @@ from weboob.core.ouiboube import WebNip
 from cuizin import db
 
 # List of backends with recipe abilities in Weboob
-BACKENDS = ['750g', 'allrecipes', 'cuisineaz', 'marmiton', 'supertoinette']
+BACKENDS = ['750g', 'allrecipes', 'cuisineaz', 'journaldesfemmes', 'marmiton',
+            'supertoinette']
 
 
 def fetch_recipe(url, recipe=None):
