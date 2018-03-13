@@ -1,6 +1,14 @@
 import * as constants from '@/constants';
 
 
+function fetchAPI(endpoint, params = {}) {
+    return fetch(
+        `${constants.API_URL}${endpoint}`,
+        Object.assign({}, { credentials: 'same-origin' }, params),
+    );
+}
+
+
 function loadJSON(response) {
     return response.json();
 }
@@ -29,59 +37,52 @@ function _postProcessRecipes(response) {
 
 
 export function loadRecipes() {
-    return fetch(`${constants.API_URL}api/v1/recipes`, { credentials: 'same-origin' })
+    return fetchAPI('api/v1/recipes')
         .then(_postProcessRecipes);
 }
 
 
 export function loadRecipe(id) {
-    return fetch(`${constants.API_URL}api/v1/recipe/${id}`, { credentials: 'same-origin' })
+    return fetchAPI(`api/v1/recipe/${id}`)
         .then(_postProcessRecipes);
 }
 
 
 export function refetchRecipe(id) {
-    return fetch(
-        `${constants.API_URL}api/v1/recipe/${id}/refetch`,
-        { credentials: 'same-origin' },
-    )
+    return fetchAPI(`api/v1/recipe/${id}/refetch`)
         .then(_postProcessRecipes);
 }
 
 
 export function postRecipeByUrl(recipe) {
-    return fetch(`${constants.API_URL}api/v1/recipes/by_url`, {
+    return fetchAPI('api/v1/recipes/by_url', {
         method: 'POST',
         body: JSON.stringify(recipe),
-        credentials: 'same-origin',
     })
         .then(_postProcessRecipes);
 }
 
 
 export function postRecipeManually(recipe) {
-    return fetch(`${constants.API_URL}api/v1/recipes/manually`, {
+    return fetchAPI('api/v1/recipes/manually', {
         method: 'POST',
         body: JSON.stringify(recipe),
-        credentials: 'same-origin',
     })
         .then(_postProcessRecipes);
 }
 
 
 export function editRecipe(id, recipe) {
-    return fetch(`${constants.API_URL}api/v1/recipe/${id}`, {
+    return fetchAPI(`api/v1/recipe/${id}`, {
         method: 'POST',
         body: JSON.stringify(recipe),
-        credentials: 'same-origin',
     })
         .then(_postProcessRecipes);
 }
 
 
 export function deleteRecipe(id) {
-    return fetch(`${constants.API_URL}api/v1/recipe/${id}`, {
+    return fetchAPI(`api/v1/recipe/${id}`, {
         method: 'DELETE',
-        credentials: 'same-origin',
     });
 }
