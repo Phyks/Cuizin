@@ -5,6 +5,10 @@ Cuizin is a tool wrapping around [Web Outside Of Browsers](http://weboob.org/)
 to help you sort and organize recipes you find online. You can also manually
 add new recipes.
 
+![Homepage](screenshots/home.png)
+
+More screenshots are available in the [`screenshots` folder](screenshots/).
+
 
 ## Installation
 
